@@ -31,7 +31,7 @@
             // Render index.html on /
             app.get('/', function(req, res){
                 res.sendFile(__dirname + "/views/index.html");
-            });
+            }); 
 
             app.get('/leveledit', function(req, res){
                 res.sendFile(__dirname + "/views/weltmeister.html");
@@ -51,13 +51,13 @@
 
             });
 
-            http.listen(3000, function(){
+            http.listen(process.env.PORT || 3000, function(){
                 console.log('listening on :3000');
             });
         }
 
         function setupUser() {
-            user.name = "Paulo";
+            user.name = "User";
         }
 
         this.init = function() {
