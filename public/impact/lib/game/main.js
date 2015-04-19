@@ -35,9 +35,13 @@ MultiVerse = ig.Game.extend({
 		// Add your own drawing code here
 		var x = ig.system.width/2,
 			y = ig.system.height/2;
+
+
+        this.screen.x += 0.6;
+        this.screen.y += 0.4;
 		
-		this.font.draw( 'It Works, bitches!', x, y, ig.Font.ALIGN.CENTER );
-        this.font.size = 240;
+//		this.font.draw( 'It Works, bitches!', x, y, ig.Font.ALIGN.CENTER );
+//        this.font.size = 240;
 	}
 });
 

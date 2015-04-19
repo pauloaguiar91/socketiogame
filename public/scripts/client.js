@@ -1,20 +1,35 @@
 (function() {
-    var socket;
+    var socket,
+        name;
 
+
+    function loginButtonClickHandler() {
+        name = $('#name_input').val();
+
+        setupConnection();
+    }
 
     function setupEvents() {
-        $('input').on("keypress", function(event) {
+        $('#chat_input').on("keypress", function(event) {
             if(event.keyCode === 13) {
-                socket.emit('chatMessage', $('input').val());
-                $('input').val("");
+                socket.emit("data", {"message": $('#chat_input').val()});
+
+                $('#chat_input').val("");
             }
-        })
+        });
+
+        $('#login_button').on("click", loginButtonClickHandler);
     }
 
     function setupConnection() {
         socket = io.connect();
 
         socket.on("connect", function(){
+            socket.emit("data", {"name": name});
+
+            $('#logged_out').fadeOut(function() {
+                $("#logged_in").fadeIn();
+            })
         });
 
         socket.on("connect_error", function(){
@@ -22,32 +37,32 @@
             socket.close();
         });
 
-        socket.on("onlineUsers", function(users) {
-           $('#online_users').find('span').html(users);
+        socket.on("error", function(eventMessage) {
+            $('#chat_frame').append('<p>'+eventMessage+'</p>');
         });
 
-        socket.on("error", function(event) {
-            $('#chat_frame').append('<p>'+event+'</p>');
-        });
-
-        socket.on('chatMessage', function(msg) {
-            if(msg instanceof Array) {
-                for(var i = 0; i < msg.length; i++ ) {
-                    $('#chat_frame').append('<p>'+ msg[i].name + ": " + msg[i].message+'</p>');
-                }
-            } else {
-                $('#chat_frame').append('<p>'+ msg.name + ": " + msg.message+'</p>');
+        socket.on("data", function(data) {
+            if(data.onlineUsers) {
+                $('#online_users').find('span').html(data.onlineUsers);
             }
 
+            if(data.chatHistory) {
+                $('#chat_frame').empty();
 
-            $('#chat_frame').scrollTop($("#chat_frame")[0].scrollHeight);
+                for(var i = 0; i < data.chatHistory.length; i++ ) {
+                    $('#chat_frame').append('<p>'+ data.chatHistory[i].name + ": " + data.chatHistory[i].message+'</p>');
+                }
 
+                scrollChatFrameToBottom();
+            }
         });
     }
 
+    function scrollChatFrameToBottom() {
+        $('#chat_frame').scrollTop($("#chat_frame")[0].scrollHeight);
+    }
 
     $(document).ready(function() {
-        setupConnection();
         setupEvents();
     })
 
