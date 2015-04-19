@@ -5,17 +5,19 @@
         var http = require('http').Server(app);
         var io = require('socket.io')(http);
         var chatHistory = [],
-            onlineUsers = 0;
+            onlineUsers = [];
 
         function setupSocketServerEvents(socket) {
             socket.on('disconnect', function() {
                 var message = socket.username + " has disconnected";
-                onlineUsers--;
+                onlineUsers.remove(socket.username);
+
                 chatHistory.push({"name": "Server", "message": message})
                 io.emit("data", {"chatHistory": chatHistory, "onlineUsers": onlineUsers});
             });
 
             socket.on("error", function(data) {
+                //probably need a better way to store this data... maybe filesystem access logs...
                 console.log(data);
             });
 
@@ -26,6 +28,11 @@
 
                 if(data.message) {
                     chatHistory.push({"name": socket.username, "message": data.message});
+
+                    if(chatHistory.length > 100) {
+                        chatHistory.shift();
+                    }
+
                     io.emit("data", {"chatHistory": chatHistory});
                 }
             });
@@ -43,8 +50,9 @@
             // Socket IO Connection
             io.on('connection', function(socket) {
                 setupSocketServerEvents(socket);
-                onlineUsers++;
+
                 setTimeout(function() {
+                    onlineUsers.push(socket.username);
                     var message = socket.username + "  has connected";
                     chatHistory.push({"name": "Server", "message": message});
 
@@ -65,4 +73,18 @@
 
     var m = new MultiVerse();
         m.init();
+
+
+
+    //Remove element in array by string name.
+    Array.prototype.remove = function(elem, all) {
+        for (var i=this.length-1; i>=0; i--) {
+            if (this[i] === elem) {
+                this.splice(i, 1);
+                if(!all)
+                    break;
+            }
+        }
+        return this;
+    };
 })();

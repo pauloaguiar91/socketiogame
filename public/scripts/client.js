@@ -1,12 +1,50 @@
 (function() {
     var socket,
-        name;
+        name,
+        userListOpen = false;
 
 
     function loginButtonClickHandler() {
         name = $('#name_input').val();
 
-        setupConnection();
+        if(name.length > 1) {
+            setupConnection();
+        } else {
+            $('#guest_login h1').first().css("color", "red").html("Please enter a username");
+        }
+
+
+
+    }
+
+    function onlineUsersClickHandler() {
+        if(userListOpen) {
+            userListOpen = false;
+            $('#online_users_list').fadeOut();
+            $('#online_users').animate({"height": "50px"});
+        } else {
+            userListOpen = true;
+            $('#online_users').animate({"height": "100%"}, function() {
+                $('#online_users_list').fadeIn();
+            });
+        }
+    }
+
+    function toggleRegistration() {
+        if($('#guest_login:visible').length) {
+            $('#guest_login').fadeOut(function() {
+                $('#register_signup').fadeIn();
+            });
+        } else {
+            $('#register_signup').fadeOut(function() {
+                $('#guest_login').fadeIn();
+            });
+        }
+
+    }
+
+    function registerUser() {
+        $('#register_signup h1').first().css("color", "red").html("Registration is currently offline");
     }
 
     function setupEvents() {
@@ -18,7 +56,10 @@
             }
         });
 
+        $('#online_users').on("click", onlineUsersClickHandler);
         $('#login_button').on("click", loginButtonClickHandler);
+        $('#register_strip span, #guest_strip span').on("click", toggleRegistration);
+        $('#register_button').on("click", registerUser);
     }
 
     function setupConnection() {
@@ -43,7 +84,12 @@
 
         socket.on("data", function(data) {
             if(data.onlineUsers) {
-                $('#online_users').find('span').html(data.onlineUsers);
+                $('#online_users_list').empty();
+                $('#online_users').find('span').html(data.onlineUsers.length);
+
+                for(var i = 0; i < data.onlineUsers.length; i++) {
+                    $('#online_users_list').append('<li>' + data.onlineUsers[i] + '</li>')
+                }
             }
 
             if(data.chatHistory) {
@@ -58,12 +104,13 @@
         });
     }
 
+
+
     function scrollChatFrameToBottom() {
         $('#chat_frame').scrollTop($("#chat_frame")[0].scrollHeight);
     }
 
     $(document).ready(function() {
         setupEvents();
-    })
-
+    });
 })();
