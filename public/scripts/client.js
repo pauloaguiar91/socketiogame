@@ -3,12 +3,13 @@ var socket;
 (function() {
         var name,
             onlineUsers = [],
+            userStorage = [],
         userListOpen = false;
 
     function loginButtonClickHandler() {
         name = $('#name_input').val();
 
-        if(name.length > 1) {
+        if(name.length >= 1) {
             setupConnection();
         } else {
             $('#guest_login h1').first().css("color", "red").html("Please enter a username");
@@ -92,22 +93,34 @@ var socket;
 
                 for(var i = 0; i < data.onlineUsers.length; i++) {
                     $('#online_users_list').append('<li>' + data.onlineUsers[i].name + '</li>');
+                }
 
-                    for(var i = 0; i < onlineUsers.length; i++) {
-                        if(onlineUsers[i].name === data.onlineUsers[i].name) {
-                            if(data.onlineUsers[i].name === name) {
-                                continue;
-                            } else {
-                                //temp hack to get the users to appear
-                                var newPlayer = ig.game.spawnEntity("EntityOtherPlayer", data.onlineUsers[i].x, data.onlineUsers[i].y);
-                                    newPlayer.name = data.onlineUsers[i].name;
+                for(var j = 0; j < onlineUsers.length; j++) {
+                    if(onlineUsers[j].name === data.onlineUsers[j].name) {
+                        if(data.onlineUsers[j].name === name) {
+                            continue;
+                        } else {
+                            entity = false;
 
-                                setTimeout(function() {
-                                    newPlayer.kill();
-                                },50);
+                            for(var ii = 0; ii < userStorage.length; ii++) {
+                                for(var i=0; i<ig.game.entities.length; i++) {
+                                    if(ig.game.entities[i].name == userStorage[ii]) {
+                                        var entity = ig.game.entities[i];
+                                        entity.pos.x = data.onlineUsers[j].x;
+                                        entity.pos.y = data.onlineUsers[j].y;
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            if(!entity) {
+                                var newPlayer = ig.game.spawnEntity("EntityOtherPlayer", data.onlineUsers[j].x, data.onlineUsers[j].y);
+                                newPlayer.name = data.onlineUsers[j].name;
+
+                                userStorage.push(newPlayer.name);
+                                console.log(userStorage)
                             }
                         }
-
                     }
                 }
             }

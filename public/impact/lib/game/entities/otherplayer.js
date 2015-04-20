@@ -10,7 +10,7 @@ ig.module(
             animSheet: new ig.AnimationSheet( '/public/impact/media/player.png', 32, 32 ),
             size: {x: 32, y:32},
             pos: {x: 1500, y: 1500},
-            friction: {x: 500, y: 500},
+            friction: {x: 400, y: 400},
             name: null,
             playerBox: null,
 
