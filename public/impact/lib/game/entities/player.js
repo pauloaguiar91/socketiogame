@@ -6,22 +6,45 @@ ig.module(
 )
 .defines(function(){
     EntityPlayer = ig.Entity.extend({
-        animSheet: new ig.AnimationSheet( '/public/impact/media/player.png', 16, 16 ),
+        animSheet: new ig.AnimationSheet( '/public/impact/media/player.png', 32, 32 ),
         size: {x: 32, y:32},
-        offset: {x: 0, y: 0},
-        flip: false,
-        maxVel: {x: 100, y: 150},
-        friction: {x: 600, y: 0},
-        accelGround: 400,
-        accelAir: 200,
-        jump: 200,
+        friction: {x: 500, y: 500},
+        name: null,
 
         init: function( x, y, settings ) {
+            this.addAnim( 'idle', 1, [0] );
+            this.addAnim( 'up', 1, [0] );
+            this.addAnim( 'down', 1, [0] );
+            this.addAnim( 'left', 1, [0] );
+            this.addAnim( 'right', 1, [0] );
+
+            this.currentAnim = this.anims.idle;
+
             this.parent( x, y, settings );
-            this.addAnim( 'idle', 1, 1 );
-            this.addAnim( 'run', 1, 1 );
-            this.addAnim( 'jump', 1, 1);
-            this.addAnim( 'fall', 1, 1 );
+        },
+
+        update: function() {
+            if( ig.input.pressed('up') ) {
+                this.currentAnim = this.anims.up;
+                this.vel.y -= 200;
+            } else if( ig.input.pressed('down') ) {
+                this.currentAnim = this.anims.down;
+                this.vel.y += 200;
+            } else if( ig.input.pressed('left') ) {
+                this.currentAnim = this.anims.left;
+                this.vel.x -= 200;
+            } else if( ig.input.pressed('right') ) {
+                this.currentAnim = this.anims.right;
+                this.vel.x += 200;
+            }
+
+            socket.emit("data", {"name": this.name, "x": this.pos.x, "y": this.pos.y});
+
+            this.parent();
+        },
+
+        draw: function() {
+            this.parent();
         }
     });
 });

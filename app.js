@@ -10,9 +10,14 @@
         function setupSocketServerEvents(socket) {
             socket.on('disconnect', function() {
                 var message = socket.username + " has disconnected";
-                onlineUsers.remove(socket.username);
 
-                chatHistory.push({"name": "Server", "message": message})
+                for(var i = 0; i < onlineUsers.length; i++) {
+                    if(onlineUsers[i].name == socket.username) {
+                        onlineUsers.splice(i, 1);
+                    }
+                }
+
+                chatHistory.push({"name": "Server", "message": message});
                 io.emit("data", {"chatHistory": chatHistory, "onlineUsers": onlineUsers});
             });
 
@@ -21,9 +26,20 @@
                 console.log(data);
             });
 
-            socket.on("data", function(data){
+            socket.on("data", function(data) {
                 if(data.name) {
                     socket.username = data.name;
+                    socket.x = data.x;
+                    socket.y = data.y;
+
+                    for(var i = 0; i < onlineUsers.length; i++) {
+                        if(onlineUsers[i].name == socket.username) {
+                            onlineUsers[i].x = socket.x;
+                            onlineUsers[i].y = socket.y;
+
+                            socket.emit("data", {"onlineUsers": onlineUsers});
+                        }
+                    }
                 }
 
                 if(data.message) {
@@ -52,9 +68,10 @@
                 setupSocketServerEvents(socket);
 
                 setTimeout(function() {
-                    onlineUsers.push(socket.username);
+                    onlineUsers.push( { "name": socket.username, "x": socket.x, "y": socket.y } );
                     var message = socket.username + "  has connected";
                     chatHistory.push({"name": "Server", "message": message});
+
 
                     io.emit("data", {"onlineUsers": onlineUsers, "chatHistory": chatHistory});
                 }, 500);
@@ -70,11 +87,8 @@
         }
     }
 
-
     var m = new MultiVerse();
         m.init();
-
-
 
     //Remove element in array by string name.
     Array.prototype.remove = function(elem, all) {

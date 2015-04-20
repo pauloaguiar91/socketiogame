@@ -1,8 +1,9 @@
-(function() {
-    var socket,
-        name,
-        userListOpen = false;
+var socket;
 
+(function() {
+        var name,
+            onlineUsers = [],
+        userListOpen = false;
 
     function loginButtonClickHandler() {
         name = $('#name_input').val();
@@ -12,9 +13,6 @@
         } else {
             $('#guest_login h1').first().css("color", "red").html("Please enter a username");
         }
-
-
-
     }
 
     function onlineUsersClickHandler() {
@@ -40,7 +38,6 @@
                 $('#guest_login').fadeIn();
             });
         }
-
     }
 
     function registerUser() {
@@ -66,7 +63,12 @@
         socket = io.connect();
 
         socket.on("connect", function(){
-            socket.emit("data", {"name": name});
+            ig.game.spawnEntity("EntityPlayer", 1500, 1500);
+
+            var player = ig.game.getEntitiesByType( EntityPlayer )[0];
+                player.name = name;
+
+            socket.emit("data", {"name": name, "playerX": player.pos.x, "playerY": player.pos.y });
 
             $('#logged_out').fadeOut(function() {
                 $("#logged_in").fadeIn();
@@ -84,11 +86,29 @@
 
         socket.on("data", function(data) {
             if(data.onlineUsers) {
+                onlineUsers = data.onlineUsers;
                 $('#online_users_list').empty();
                 $('#online_users').find('span').html(data.onlineUsers.length);
 
                 for(var i = 0; i < data.onlineUsers.length; i++) {
-                    $('#online_users_list').append('<li>' + data.onlineUsers[i] + '</li>')
+                    $('#online_users_list').append('<li>' + data.onlineUsers[i].name + '</li>');
+
+                    for(var i = 0; i < onlineUsers.length; i++) {
+                        if(onlineUsers[i].name === data.onlineUsers[i].name) {
+                            if(data.onlineUsers[i].name === name) {
+                                continue;
+                            } else {
+                                //temp hack to get the users to appear
+                                var newPlayer = ig.game.spawnEntity("EntityOtherPlayer", data.onlineUsers[i].x, data.onlineUsers[i].y);
+                                    newPlayer.name = data.onlineUsers[i].name;
+
+                                setTimeout(function() {
+                                    newPlayer.kill();
+                                },50);
+                            }
+                        }
+
+                    }
                 }
             }
 

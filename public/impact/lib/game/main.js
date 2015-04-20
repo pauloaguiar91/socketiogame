@@ -4,16 +4,16 @@ ig.module(
 .requires(
 	'impact.game',
 	'impact.font',
+    'game.entities.player',
+    'game.entities.otherplayer',
+    'game.entities.playerbox',
     'game.levels.untitled'
 )
 .defines(function(){
         var dir = "/public/impact/";
 
 MultiVerse = ig.Game.extend({
-
-	// Load a font
-	//font: new ig.Font( dir + 'media/04b03.font.png' ),
-
+	font: new ig.Font( dir + 'media/04b03.font.png' ),
 
     resizeEventHandler: function() {
         ig.system.resize($(window).width(), $(window).height());
@@ -34,26 +34,26 @@ MultiVerse = ig.Game.extend({
 	
 	update: function() {
 		// Update all entities and backgroundMaps
+
+
 		this.parent();
-
-
-        if( ig.input.pressed('up') ) { }
-        if( ig.input.pressed('down') ) { }
-        if( ig.input.pressed('left') ) { }
-        if( ig.input.pressed('right') ) { }
 	},
 	
 	draw: function() {
-		this.parent();
+        this.parent();
 
-		var x = ig.system.width/2,
-			y = ig.system.height/2;
+        var player = this.getEntitiesByType( EntityPlayer )[0];
 
-//        this.screen.x += 1;
-//        this.screen.y += 1;
-		
-//		this.font.draw('', x, y, ig.Font.ALIGN.CENTER);
-//        this.font.size = 240;
+        if( player ) {
+            var x = player.pos.x - ig.system.width / 2,
+                y = player.pos.y - ig.system.height / 2;
+
+            this.screen.x = x;
+            this.screen.y = y;
+
+            this.font.size = 50;
+            this.font.draw(player.name, (ig.system.width / 2), (ig.system.height / 2) - 10, ig.Font.ALIGN.right );
+        }
 	}
 });
 
