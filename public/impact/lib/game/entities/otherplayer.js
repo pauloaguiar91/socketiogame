@@ -11,7 +11,7 @@ ig.module(
             size: {x: 32, y:32},
             pos: {x: 1500, y: 1500},
             friction: {x: 400, y: 400},
-            name: null,
+            name: "otherPlayer",
             playerBox: null,
 
             init: function( x, y, settings ) {

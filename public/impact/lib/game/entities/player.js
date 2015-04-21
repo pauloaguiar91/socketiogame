@@ -7,9 +7,9 @@ ig.module(
 .defines(function(){
     EntityPlayer = ig.Entity.extend({
         animSheet: new ig.AnimationSheet( '/public/impact/media/player.png', 32, 32 ),
-        size: {x: 32, y:32},
-        friction: {x: 500, y: 500},
-        name: null,
+        size: { x: 32, y:32 },
+        friction: { x: 500, y: 500 },
+        name: "player",
 
         init: function( x, y, settings ) {
             this.addAnim( 'idle', 1, [0] );
@@ -19,6 +19,7 @@ ig.module(
             this.addAnim( 'right', 1, [0] );
 
             this.currentAnim = this.anims.idle;
+            this.name = settings.name;
 
             this.parent( x, y, settings );
         },
@@ -38,8 +39,7 @@ ig.module(
                 this.vel.x += 200;
             }
 
-            socket.emit("data", {"name": this.name, "x": this.pos.x, "y": this.pos.y});
-
+            ig.game.socket.emit("data", { "name": this.name, "x": this.pos.x, "y": this.pos.y } );
             this.parent();
         },
 
