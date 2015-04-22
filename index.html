@@ -1,20 +1,76 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>MMORPG Project</title>
         <link href="/public/css/main.css" rel="stylesheet">
     </head>
 
     <body>
-    <canvas id="canvas"></canvas>
-    <div id="logged_out">
+    <div id="navbar">
+        <ul>
+            <li data-view="index">Index</li>
+            <li data-view="blog">Developer Blog</li>
+            <li data-view="community">Community
+        </ul>
+    </div>
 
+    <div id="forum_container"></div>
+    
+    <div id="blog_container" class="site_view">
+        <div id="blog_view_container"></div>
+        <div class="post">
+            <h1>Early days... (April 21, 2015)</h1>
+            <p> I've always had a facination with being "online". I remember logging into my first ever
+                <span class="blog_view_toggle" data-id="runescape2-2004">MMORPG[Runescape2]</span> for the
+                first time back in 2004. I was maybe 12 years old and had no idea what I was in for. Before I realized
+                it, I was talking to people and making friends. I was excited to login, and continue these relationships with
+                people all over the world that I would probably never meet otherwise. We shared common goals, and that
+                was awesome!
+            </p>
+
+            <p>
+                MMORPG's are social games at the core, and thats what makes them special. It seems finally developers are starting
+                to figure this out.
+            </p>
+
+            <p>
+                This game is a project that will be unlike any other MMORPG out there. There are so many elements to modern
+                AAA MMORPG'S that make them so bad that I cant believe people poured millions of dollars into the project,
+                and thought "Hey, this is fun!". Social is fun, lets do cool things with other people.
+            </p>
+            <p>
+                Every game is copying eachother, and they arent focusing on the bigger picture. Games are
+                for fun; are you having fun? This game will not be pouring millions of dollars into graphics, but my goal
+                is to make sure you are having fun.
+            </p>
+
+            <p>
+                MMORPG's are hard; I'll be honest, There will be lots of bugs, lots of new features, and LOTS of fun.
+            </p>
+
+            <p>
+                I'm writing these developer blogs monthly, in hopes that people like you and me come across it  and get
+                behind the idea. An online game, where its not about swords and lore, but about the experience possible.
+            </p>
+            <p>
+                Come hang out.
+            </p>
+            <p>
+                -Paulo
+            </p>
+        </div>
+    </div>
+    
+    
+    <canvas id="canvas"></canvas>
+    <div id="logged_out" class="site_view">
         <div id="logged_out_container">
             <div id="guest_login">
                 <h1>Welcome, please enter a username to quick join</h1>
 
                 <div id="join_container">
-                    <input id="name_input" type="text/css"/>
-                    <div id="login_button" class="button" placeholder="Nickname">Join</div>
+                    <input id="name_input" type="text/css" placeholder="Nickname" />
+                    <div id="login_button" class="button">Join</div>
                 </div>
 
                 <h1 id="register_strip">OR you can <span>register</span> an account to save your game data.</h1>
@@ -36,7 +92,7 @@
     </div>
 
 
-    <div id="logged_in">
+    <div id="logged_in" class="site_view">
         <div id="online_users">Online Users: <span>-</span>
             <ul id="online_users_list">
 

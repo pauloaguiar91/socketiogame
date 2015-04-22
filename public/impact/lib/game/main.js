@@ -25,7 +25,8 @@ MultiVerse = ig.Game.extend({
 	init: function() {
 		// Initialize your game here; bind keys etc.
         this.loadLevel( LevelUntitled );
-
+        this.screen.x = 1900;
+        this.screen.y = 1500;
         ig.input.bind( ig.KEY.UP_ARROW, 'up' );
         ig.input.bind( ig.KEY.DOWN_ARROW, 'down' );
         ig.input.bind( ig.KEY.LEFT_ARROW, 'left' );
@@ -35,7 +36,7 @@ MultiVerse = ig.Game.extend({
 
         $("#chat_input").on("keypress", function(event) {
             if(event.keyCode === 13) {
-                this.socket.emit("data", {"message": $("#chat_input").val()});
+                ig.game.socket.emit("data", { "message": $("#chat_input").val() });
 
                 $("#chat_input").val("");
             }
@@ -50,7 +51,6 @@ MultiVerse = ig.Game.extend({
         this.parent();
 
         var player = this.getEntitiesByType( EntityPlayer )[0];
-
         if( player ) {
             var x = player.pos.x - ig.system.width / 2,
                 y = player.pos.y - ig.system.height / 2;
@@ -58,8 +58,36 @@ MultiVerse = ig.Game.extend({
             this.screen.x = x;
             this.screen.y = y;
 
+
+            if(this.screen.x <= 0){
+                this.screen.x = 0;
+            }
+            if(this.screen.y <= 0){
+                this.screen.y = 0;
+            }
+
+            if(this.screen.x >= this.collisionMap.width * this.collisionMap.tilesize - ig.system.width){
+                this.screen.x = this.collisionMap.width * this.collisionMap.tilesize - ig.system.width;
+            }
+
+            if(this.screen.y >= this.collisionMap.height * this.collisionMap.tilesize - ig.system.height){
+                this.screen.y = this.collisionMap.height * this.collisionMap.tilesize - ig.system.height;
+            }
+
             this.font.size = 50;
-            this.font.draw(player.name, (ig.system.width / 2), (ig.system.height / 2) - 10, ig.Font.ALIGN.right );
+            var nameX = player.pos.x - ig.game.screen.x;
+            var nameY = player.pos.y - ig.game.screen.y;
+            this.font.draw(player.name, nameX, nameY - 10, ig.Font.ALIGN.right );
+
+
+            var otherPlayers = ig.game.getEntitiesByType(EntityOtherPlayer);
+
+            for(var ii = 0; ii < otherPlayers.length ; ii++) {
+                var otherX = otherPlayers[ii].pos.x - ig.game.screen.x;
+                var otherY = otherPlayers[ii].pos.y - ig.game.screen.y;
+
+                this.font.draw(otherPlayers[ii].name, otherX, otherY - 10, ig.Font.ALIGN.right );
+            }
         }
 	},
 
@@ -69,9 +97,9 @@ MultiVerse = ig.Game.extend({
         this.socket.on("connect", function() {
             var newPlayer = ig.game.spawnEntity("EntityPlayer", 1500, 1500, {"name": name} );
 
-            this.emit("data", {"name": name, "x": newPlayer.pos.x, "y": newPlayer.pos.y });
+            ig.game.socket.emit("data", {"name": name, "x": newPlayer.pos.x, "y": newPlayer.pos.y });
 
-            $("#logged_out").fadeOut(function() {
+            $("#logged_out, #navbar").fadeOut(function() {
                 $("#logged_in").fadeIn();
             })
         });
