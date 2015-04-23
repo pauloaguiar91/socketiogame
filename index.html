@@ -7,11 +7,12 @@
 
     <body>
     <div id="navbar">
-        <ul>
+        <ul style="display: none">
             <li data-view="index">Index</li>
             <li data-view="blog">Developer Blog</li>
             <li data-view="community">Community
         </ul>
+        <span id="version_number">v0.17</span>
     </div>
 
     <div id="forum_container"></div>
@@ -20,37 +21,40 @@
         <div id="blog_view_container"></div>
         <div class="post">
             <h1>Early days... (April 21, 2015)</h1>
-            <p> I've always had a facination with being "online". I remember logging into my first ever
-                <span class="blog_view_toggle" data-id="runescape2-2004">MMORPG[Runescape2]</span> for the
-                first time back in 2004. I was maybe 12 years old and had no idea what I was in for. Before I realized
-                it, I was talking to people and making friends. I was excited to login, and continue these relationships with
-                people all over the world that I would probably never meet otherwise. We shared common goals, and that
-                was awesome!
+            <p> I've always had a fascination with being "online". I still remember logging into my first ever MMORPG.
+
+                <span class="blog_view_toggle" data-id="runescape2-2004">Runescape2</span>
+
+                For the first time back in 2004. I was maybe 12 years old and had no idea what I was in for. Before I realized
+                it, I was talking to people and making friends. I was excited to be a part of something, and continue these
+                relationships with people all over the world that I would probably never meet otherwise. We shared common
+                goals, and that was awesome!
             </p>
 
             <p>
-                MMORPG's are social games at the core, and thats what makes them special. It seems finally developers are starting
+                MMORPG's are social games at the core, and that's what makes them special. It seems finally developers are starting
                 to figure this out.
             </p>
 
             <p>
-                This game is a project that will be unlike any other MMORPG out there. There are so many elements to modern
-                AAA MMORPG'S that make them so bad that I cant believe people poured millions of dollars into the project,
-                and thought "Hey, this is fun!". Social is fun, lets do cool things with other people.
+                This game is a project that will be unlike any other mmo out there. There are so many bad design decisions
+                in modern games that make them not fun to play. Social is fun, lets do cool things with other people.
             </p>
             <p>
-                Every game is copying eachother, and they arent focusing on the bigger picture. Games are
+                Online gaming has hit a standstill, and they aren't focusing on the bigger picture. Games are
                 for fun; are you having fun? This game will not be pouring millions of dollars into graphics, but my goal
-                is to make sure you are having fun.
+                is to make sure you are having fun with lots of other people.
             </p>
 
             <p>
-                MMORPG's are hard; I'll be honest, There will be lots of bugs, lots of new features, and LOTS of fun.
+                MMORPG's are hard. I'll be honest, there will be lots of bugs and features, but also a ton of fun.
+                I'm keeping the servers up 24/7 so you can just pop in and see how the game is progressing. Patch notes
+                are written weekly, and server updates (now and the near future) can happen at any moment.
             </p>
 
             <p>
                 I'm writing these developer blogs monthly, in hopes that people like you and me come across it  and get
-                behind the idea. An online game, where its not about swords and lore, but about the experience possible.
+                behind the idea. An online game, where its not about swords and lore, but about the best experience possible.
             </p>
             <p>
                 Come hang out.
@@ -103,6 +107,14 @@
                 <p></p>
             </div>
             <input id="chat_input" type="text" />
+        </div>
+        <div id="UI_character" class="ui-element">
+            <div class="frame">
+                <div class="top_bar">
+                    Character Information
+                    <div class="close">x</div>
+                </div>
+            </div>
         </div>
     </div>
 

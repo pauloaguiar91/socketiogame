@@ -12,6 +12,8 @@ ig.module(
 .defines(function(){
         var dir = "/public/impact/",
             userStorage = [],
+            savedChatHistory,
+            onlineUserCount;
 
 MultiVerse = ig.Game.extend({
     socket: null,
@@ -95,7 +97,7 @@ MultiVerse = ig.Game.extend({
         this.socket = io.connect();
 
         this.socket.on("connect", function() {
-            var newPlayer = ig.game.spawnEntity("EntityPlayer", 1500, 1500, {"name": name} );
+            var newPlayer = ig.game.spawnEntity("EntityPlayer", 4500, 4220, {"name": name} );
 
             ig.game.socket.emit("data", {"name": name, "x": newPlayer.pos.x, "y": newPlayer.pos.y });
 
@@ -117,11 +119,15 @@ MultiVerse = ig.Game.extend({
             if(data.onlineUsers) {
                 var onlineUsers = data.onlineUsers;
 
-                $("#online_users_list").empty();
-                $("#online_users").find("span").html(data.onlineUsers.length);
+                if(onlineUserCount !== data.onlineUsers.length) {
+                    onlineUserCount = data.onlineUsers.length;
 
-                for(var i = 0; i < data.onlineUsers.length; i++) {
-                    $("#online_users_list").append("<li>" + data.onlineUsers[i].name + "</li>");
+                    $("#online_users_list").empty();
+                    $("#online_users").find("span").html(data.onlineUsers.length);
+
+                    for(var i = 0; i < data.onlineUsers.length; i++) {
+                        $("#online_users_list").append("<li>" + data.onlineUsers[i].name + "</li>");
+                    }
                 }
 
                 //remove name from onlineUsers, so that storage doesnt pick it up
@@ -132,7 +138,6 @@ MultiVerse = ig.Game.extend({
                         }
                     }
                 }
-
 
                 //ISSUE 1: Second entity is constantly overwritten. entityThisPass keeps returning true.
                 //ISSUE 2: Need to remove entity
@@ -183,6 +188,11 @@ MultiVerse = ig.Game.extend({
             }
 
             if(data.chatHistory) {
+                if(savedChatHistory === data.chatHistory)
+                    return;
+
+                savedChatHistory === data.chatHistory;
+                console.log(savedChatHistory)
                 $("#chat_frame").empty();
 
                 for(var i = 0; i < data.chatHistory.length; i++ ) {

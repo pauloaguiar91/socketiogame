@@ -7,8 +7,8 @@ ig.module(
     .defines(function(){
         EntityOtherPlayer = ig.Entity.extend({
             font: new ig.Font( '/public/impact/media/04b03.font.png' ),
-            animSheet: new ig.AnimationSheet( '/public/impact/media/player.png', 32, 32 ),
-            size: {x: 32, y:32},
+            animSheet: new ig.AnimationSheet( '/public/impact/media/otherPlayer.png', 30, 48 ),
+            size: {x: 30, y:48},
             pos: {x: 1500, y: 1500},
             friction: {x: 400, y: 400},
             name: "otherPlayer",

@@ -1,4 +1,5 @@
 @import "normalize";
+@import "_gameUI";
 
 body {
   background: lightgray;
@@ -224,6 +225,7 @@ input {
   height: 100%;
   padding: 0 120px 120px 120px;
   background: rgba(0,0,0,0.8);
+  overflow: hidden;
 
   #blog_view_container {
     position: absolute;
@@ -245,12 +247,25 @@ input {
   p {
     color: white;
     margin-bottom: 20px;
+    line-height: 26px;
+    font-family: Helvetica;
+    font-size: 18px;
 
   }
 
   span.blog_view_toggle {
+    display: block;
     color: deepskyblue;
     font-weight: bold;
     cursor: pointer;
+    margin: 25px 0;
   }
+}
+
+#version_number {
+  color: lightblue;
+  position: absolute;
+  bottom: 5px;
+  text-align: center;
+  width: 100%;
 }
