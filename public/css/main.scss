@@ -30,6 +30,11 @@ input {
   }
 }
 
+body {
+  //temporary...
+  overflow: hidden;
+}
+
 #online_users {
   position: absolute;
   top: 0;
@@ -155,7 +160,6 @@ input {
   border: 2px solid;
   height: 200px;
   background: rgba(0,0,0,0.4);
-  overflow-y: scroll;
 
   p {
     color: white;
@@ -181,6 +185,11 @@ input {
     border: 0;
     color: white;
     padding-left: 10px;
+
+
+    &.focus {
+      background: rgba(0,0,0,0.6);
+    }
 
   }
 }
@@ -218,7 +227,7 @@ input {
 
 #blog_container {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

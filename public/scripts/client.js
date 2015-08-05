@@ -94,10 +94,7 @@
         $("#register_button").on("click", registerUser);
         $("#blog_container .blog_view_toggle").on("mouseenter", function() { mouseHoverViewToggle($(this)) });
         $("#navbar ul li").on("click", function() { navigationClickHandler($(this).data("view")) });
-
         $('#UI_character').drags();
-
-
     }
 
     $(document).ready(function() {

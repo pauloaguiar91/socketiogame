@@ -25,7 +25,6 @@ MultiVerse = ig.Game.extend({
 	
 	
 	init: function() {
-		// Initialize your game here; bind keys etc.
         this.loadLevel( LevelUntitled );
         this.screen.x = 1900;
         this.screen.y = 1500;
@@ -36,13 +35,7 @@ MultiVerse = ig.Game.extend({
 
         $(window).resize(this.resizeEventHandler);
 
-        $("#chat_input").on("keypress", function(event) {
-            if(event.keyCode === 13) {
-                ig.game.socket.emit("data", { "message": $("#chat_input").val() });
-
-                $("#chat_input").val("");
-            }
-        });
+        this.bindChatEvents();    
 	},
 	
 	update: function() {
@@ -92,6 +85,38 @@ MultiVerse = ig.Game.extend({
             }
         }
 	},
+
+    bindChatEvents: function() {
+        $(document).on("keypress", function(event) {
+            var keyPressed = event.which;
+
+            //enter key + chat not in focus
+            if(keyPressed === 13 && !$('#chat_input').hasClass('focus')) {
+                $('#chat_input').focus();
+
+            //enter key + chat in focus
+            } else if(keyPressed === 13 && $('#chat_input').hasClass('focus')) {
+
+                //check if there is text the user is trying to send
+                if($('#chat_input').val().length) {
+                    ig.game.socket.emit("data", { "message": $("#chat_input").val() });
+                    $('#chat_input').val("").blur();
+                } else {
+                    //if not, close the chat box
+                    $('#chat_input').blur();
+                }
+            } 
+        });
+
+        $('#chat_input').on("focus", function() {
+            $(this).addClass('focus');
+        });
+
+        
+        $('#chat_input').on("blur", function() {    
+            $(this).removeClass('focus');
+        });
+    },
 
     setupConnection: function(name) {
         this.socket = io.connect();
@@ -182,7 +207,6 @@ MultiVerse = ig.Game.extend({
                             return;
 
                         userStorage.push(newPlayer.name);
-                        //console.log(userStorage)
                     }
                 }
             }
@@ -206,6 +230,6 @@ MultiVerse = ig.Game.extend({
     },
 });
 
-ig.main( '#canvas', MultiVerse, 60, $(window).width(), $(window).height(), 1 );
+ig.main( '#canvas', MultiVerse, 60, $('body').width(), $(window).height(),  1 );
 
 });
